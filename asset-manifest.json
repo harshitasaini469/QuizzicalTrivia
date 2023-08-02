@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/QuizzicalTrivia/static/css/main.d5739a08.css",
+    "main.js": "/QuizzicalTrivia/static/js/main.1ae683af.js",
+    "index.html": "/QuizzicalTrivia/index.html",
+    "main.d5739a08.css.map": "/QuizzicalTrivia/static/css/main.d5739a08.css.map",
+    "main.1ae683af.js.map": "/QuizzicalTrivia/static/js/main.1ae683af.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d5739a08.css",
+    "static/js/main.1ae683af.js"
+  ]
+}
