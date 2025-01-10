@@ -52,7 +52,7 @@ const Main = ({ questionsData, handleRestart }) => {
     }
     console.log(score);
     setSelectedAns(null);
-    setQueNo((queNo) => queNo + 1);
+    if (queNo < questions.length - 1) setQueNo((queNo) => queNo + 1);
   };
 
   const restart = useCallback(() => {
@@ -71,7 +71,7 @@ const Main = ({ questionsData, handleRestart }) => {
         visible={true}
         height="80"
         width="80"
-        color="#4fa94d"
+        color="#047857"
         ariaLabel="puff-loading"
         wrapperStyle={{}}
         wrapperClass=""
@@ -82,11 +82,13 @@ const Main = ({ questionsData, handleRestart }) => {
   // Guard for when queNo exceeds the number of questions
   if (isFinished) {
     return (
-      <div className="flex flex-col items-center">
-        <p>You've completed all the questions!</p>
-        <p>Your final Score is {score + "/" + questions.length}</p>
+      <div className="flex flex-col gap-2 items-center font-serif">
+        <p className="text-lg">
+          Your Final Score is {score + "/" + questions.length}
+        </p>
+        {}
         <button
-          className="w-fit text-lg py-2 border rounded-md px-5 hover:shadow-md bg-teal-600 hover:shadow-lg cursor-pointer active:bg-teal-700 "
+          className="w-fit text-lg py-2 border rounded-md px-5 bg-emerald-700 text-white hover:shadow-lg cursor-pointer active:bg-white active:text-emerald-700 "
           onClick={restart}
         >
           Play Again?
@@ -98,7 +100,7 @@ const Main = ({ questionsData, handleRestart }) => {
   return (
     <>
       {
-        <div className="flex flex-col gap-3 items-center justify-center w-3/5">
+        <div className="flex flex-col gap-3 items-center justify-center w-3/5 font-serif">
           <p>Total : {score}</p>
           <Question
             question={questions[queNo].question}
@@ -111,14 +113,16 @@ const Main = ({ questionsData, handleRestart }) => {
             <button
               onClick={handleNext}
               disabled={!selectedAns}
-              className={`cursor-pointer w-fit px-4 py-2 hover:shadow-md rounded-md ${selectedAns ? "bg-teal-600 hover:bg-teal-700 hover:text-white " : "bg-gray-100"}`}
+              className={`cursor-pointer w-fit px-4 py-2 hover:shadow-md rounded-md ${selectedAns ? "bg-emerald-700 text-white " : "bg-gray-100"}`}
             >
               Next
             </button>
           ) : (
             <button
-              onClick={() => setIsFinished(true)}
-              className={`cursor-pointer w-fit px-4 py-2 hover:shadow-md rounded-md ${selectedAns ? "bg-teal-600 hover:bg-teal-700 hover:text-white " : "bg-gray-100"}`}
+              onClick={() => {
+                handleNext(), setIsFinished(true);
+              }}
+              className={`cursor-pointer w-fit px-4 py-2 hover:shadow-md rounded-md ${selectedAns ? "bg-emerald-700 text-white" : "bg-gray-100"}`}
             >
               Submit
             </button>

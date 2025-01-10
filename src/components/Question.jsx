@@ -6,8 +6,8 @@ const Question = (props) => {
   const { question, answers, onSelectAnswer, selectedAnswer } = props;
 
   return (
-    <div className="">
-      <div>
+    <div className="font-serif">
+      <div className="flex flex-col gap-2">
         <p>{decode(question)}</p>
         <div className="flex flex-col gap-2">
           {answers.map((answer, index) => (
@@ -15,7 +15,7 @@ const Question = (props) => {
               key={index}
               className={`border p-2 rounded-md hover:shadow-md cursor-pointer ${
                 selectedAnswer === answer
-                  ? "bg-teal-600 text-white"
+                  ? "bg-emerald-700 text-white"
                   : "bg-gray-100"
               }`}
               onClick={() => onSelectAnswer(answer)}

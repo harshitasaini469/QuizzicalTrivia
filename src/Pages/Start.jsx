@@ -28,7 +28,7 @@ const Start = ({ reStartQuiz }) => {
     <>
       {!begin ? (
         <form
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-5 font-serif p-2"
           onSubmit={(e) => {
             e.preventDefault(); // Prevent the page from refreshing
             setBegin(true); // Start the quiz
@@ -41,6 +41,7 @@ const Start = ({ reStartQuiz }) => {
             <input
               id="amount"
               type="number"
+              className={"outline-none border-black border rounded-md p-1 w-full"}
               value={questionsData?.amount}
               onChange={(e) =>
                 setQuestionsData({ ...questionsData, amount: e.target.value })
@@ -60,6 +61,7 @@ const Start = ({ reStartQuiz }) => {
                   categoryId: e.target.value,
                 })
               }
+              className={"outline-none border-black border rounded-md p-1 w-full"}
               required
             >
               <option value="">Select Category</option>
@@ -83,6 +85,7 @@ const Start = ({ reStartQuiz }) => {
                   difficulty: e.target.value,
                 })
               }
+              className={"outline-none border-black border rounded-md p-1 w-full"}
               required
             >
               <option value="">Select Difficulty</option>
@@ -95,7 +98,7 @@ const Start = ({ reStartQuiz }) => {
           </div>
           <button
             type="submit"
-            className="w-fit text-lg py-2 border rounded-md px-5 hover:shadow-md bg-teal-600 hover:shadow-lg cursor-pointer active:bg-teal-700"
+            className="w-fit text-lg py-2 border rounded-md px-5 bg-emerald-700 text-white hover:shadow-lg cursor-pointer active:bg-white active:text-emerald-700 flex self-center"
             // Prevent submission if inputs are empty
           >
             Let's Begin

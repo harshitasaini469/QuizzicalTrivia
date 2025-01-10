@@ -12,12 +12,12 @@ const Home = () => {
     setIsStarted(false);
   };
   return (
-    <div className="flex flex-col gap-2 justify-center items-center w-1/2 h-4/5 border border-teal-800 rounded-xl">
+    <div className="flex flex-col gap-2 justify-center items-center w-1/2 h-4/5 border-double border-8 border-teal-800 rounded-xl shadow-lg shadow-slate-500 bg-white">
       {!isStarted ? (
         <div className="flex flex-col gap-3 items-center justify-center">
-          <h1 className="text-2xl">Let's start the game!!</h1>
+          <h1 className="text-3xl font-mono">Let's start the Quiz!!</h1>
           <button
-            className="w-fit text-lg py-2 border rounded-md px-5 hover:shadow-md bg-teal-600 hover:shadow-lg cursor-pointer active:bg-teal-700 "
+            className="w-fit text-lg py-2 border rounded-md px-5 bg-emerald-700 text-white hover:shadow-lg cursor-pointer active:bg-white active:text-emerald-700"
             onClick={() => {
               setIsStarted(true), EnableLoader();
             }}
@@ -32,7 +32,7 @@ const Home = () => {
           visible={true}
           height="80"
           width="80"
-          color="#4fa94d"
+          color="#047857"
           ariaLabel="puff-loading"
           wrapperStyle={{}}
           wrapperClass=""
