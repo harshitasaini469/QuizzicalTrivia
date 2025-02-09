@@ -3,10 +3,11 @@ import Main from "./Main";
 
 const Start = ({ reStartQuiz }) => {
   const [begin, setBegin] = useState(false);
-  const [questionsData, setQuestionsData] = useState({
-    amount: 5,
-    categoryId: 0,
-    difficulty: "",
+  const [questionsData, setQuestionsData] = useState(() => {
+    const storedData = localStorage.getItem("questionsData");
+    return storedData
+      ? JSON.parse(storedData)
+      : { amount: 5, categoryId: 0, difficulty: "" };
   });
   const [categories, seCategories] = useState([]);
   const difficultyLevel = ["easy", "medium", "hard"];
@@ -19,9 +20,23 @@ const Start = ({ reStartQuiz }) => {
       })
       .catch((error) => console.error("Failed to fetch categories:", error));
   }, []);
+  useEffect(() => {
+    const gameBegin = localStorage.getItem("gameBegin");
+    if (gameBegin != null) setBegin(gameBegin);
+  }, [begin]);
+  
+  useEffect(() => {
+    localStorage.setItem("questionsData", JSON.stringify(questionsData));
+  }, [questionsData]);
 
+  const handleBegin = () => {
+    setBegin(true);
+    localStorage.setItem("gameBegin", true);
+  };
   const handleRestart = () => {
     setBegin(false);
+    localStorage.removeItem("gameBegin");
+    localStorage.removeItem("questionsData");
     reStartQuiz();
   };
   return (
@@ -31,7 +46,7 @@ const Start = ({ reStartQuiz }) => {
           className="flex flex-col gap-5 font-serif p-2"
           onSubmit={(e) => {
             e.preventDefault(); // Prevent the page from refreshing
-            setBegin(true); // Start the quiz
+            handleBegin(); // Start the quiz
           }}
         >
           <div className="flex flex-col gap-2">
@@ -41,7 +56,9 @@ const Start = ({ reStartQuiz }) => {
             <input
               id="amount"
               type="number"
-              className={"outline-none border-black border rounded-md p-1 w-full"}
+              className={
+                "outline-none border-black border rounded-md p-1 w-full"
+              }
               value={questionsData?.amount}
               onChange={(e) =>
                 setQuestionsData({ ...questionsData, amount: e.target.value })
@@ -61,7 +78,9 @@ const Start = ({ reStartQuiz }) => {
                   categoryId: e.target.value,
                 })
               }
-              className={"outline-none border-black border rounded-md p-1 w-full"}
+              className={
+                "outline-none border-black border rounded-md p-1 w-full"
+              }
               required
             >
               <option value="">Select Category</option>
@@ -85,7 +104,9 @@ const Start = ({ reStartQuiz }) => {
                   difficulty: e.target.value,
                 })
               }
-              className={"outline-none border-black border rounded-md p-1 w-full"}
+              className={
+                "outline-none border-black border rounded-md p-1 w-full"
+              }
               required
             >
               <option value="">Select Difficulty</option>

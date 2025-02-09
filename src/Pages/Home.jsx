@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Start from "./Start";
 import { Puff } from "react-loader-spinner";
 const Home = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [loader, setLoader] = useState(false);
+
+  useEffect(()=>{
+    const start=localStorage.getItem('gameStarted');
+    if(start!=null) setIsStarted(start);
+  },[])
+  
+  const handleStart = () => {
+    setIsStarted(true);
+    localStorage.setItem("gameStarted", true);
+  };
   const EnableLoader = () => {
     setLoader(true);
     setTimeout(() => setLoader(false), 500);
   };
   const reStartQuiz = () => {
     setIsStarted(false);
+    localStorage.removeItem("gameStarted");
+    
   };
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-1/2 h-4/5 border-double border-8 border-teal-800 rounded-xl shadow-lg shadow-slate-500 bg-white">
@@ -19,7 +31,7 @@ const Home = () => {
           <button
             className="w-fit text-lg py-2 border rounded-md px-5 bg-emerald-700 text-white hover:shadow-lg cursor-pointer active:bg-white active:text-emerald-700"
             onClick={() => {
-              setIsStarted(true), EnableLoader();
+              handleStart(), EnableLoader();
             }}
           >
             Start
