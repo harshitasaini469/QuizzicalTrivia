@@ -35,8 +35,6 @@ const Start = ({ reStartQuiz }) => {
   };
   const handleRestart = () => {
     setBegin(false);
-    localStorage.removeItem("gameBegin");
-    localStorage.removeItem("questionsData");
     reStartQuiz();
   };
   return (

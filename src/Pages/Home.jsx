@@ -20,7 +20,6 @@ const Home = () => {
   };
   const reStartQuiz = () => {
     setIsStarted(false);
-    localStorage.removeItem("gameStarted");
     
   };
   return (

@@ -13,10 +13,13 @@ const Main = ({ questionsData, handleRestart }) => {
     return queNo ? Number(queNo) : 0;
   });
   const [selectedAns, setSelectedAns] = useState(null);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(() => {
+    const storedScore = localStorage.getItem("score");
+    return storedScore ? Number(storedScore) : 0;
+  });
   const [loading, setLoading] = useState(true);
   const [isFinished, setIsFinished] = useState(() => {
-    const finished = localStorage.getItem("isFinished");
+    const finished = localStorage.getItem("gameOver");
     return finished ? JSON.parse(finished) : false;
   });
   const [answers, setAnswers] = useState([]);
@@ -25,6 +28,7 @@ const Main = ({ questionsData, handleRestart }) => {
     if (questions.length === 0) {
       const fetchQuestions = async () => {
         try {
+          await new Promise((resolve) => setTimeout(resolve, 1000)); // Delay API call
           console.log("fetching questions");
           const response = await fetch(
             `https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&difficulty=${difficulty}&type=multiple`,
@@ -35,21 +39,26 @@ const Main = ({ questionsData, handleRestart }) => {
           const questions = data.results;
 
           if (questions.length === 0) throw new Error("No Questions Found");
-
+          console.log(questions);
           setQuestions(questions);
+          localStorage.setItem("questions", JSON.stringify(questions));
         } catch (err) {
           console.log(err.message);
         } finally {
           setLoading(false);
         }
       };
-      fetchQuestions();
+      if (questions.length === 0) fetchQuestions();
     } else return;
   }, [amount, categoryId, difficulty]);
+
   useEffect(() => {
-    localStorage.setItem("questions", JSON.stringify(questions));
-    setLoading(false);
-  }, [questions]);
+    const storedQuestions = localStorage.getItem("questions");
+    if (storedQuestions) {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (questions && questions.length > 0 && queNo < questions.length) {
       setAnswers(
@@ -64,10 +73,23 @@ const Main = ({ questionsData, handleRestart }) => {
   useEffect(() => {
     localStorage.setItem("queNo", queNo);
   }, [queNo]);
+  useEffect(() => {
+    localStorage.setItem("score", score);
+  }, [score]);
 
   useEffect(() => {
     localStorage.setItem("gameOver", isFinished);
   }, [isFinished]);
+
+  useEffect(() => {
+    const clearStorageOnClose = () => {
+      localStorage.clear();
+    };
+    window.addEventListener("beforeunload", clearStorageOnClose);
+    return () => {
+      window.removeEventListener("beforeunload", clearStorageOnClose);
+    };
+  }, []);
 
   const handleNext = () => {
     if (questions[queNo] && selectedAns === questions[queNo].correct_answer) {
@@ -77,15 +99,15 @@ const Main = ({ questionsData, handleRestart }) => {
     setSelectedAns(null);
     if (queNo < questions.length - 1) setQueNo((queNo) => queNo + 1);
   };
+
   const handleFinishing = () => {
     setIsFinished(true);
   };
   const restart = useCallback(() => {
     setQueNo(0);
     setScore(0);
+    localStorage.clear();
     setLoading(true);
-    localStorage.removeItem("questions");
-    localStorage.removeItem("queNo");
     setTimeout(() => {
       setLoading(false);
       handleRestart();
@@ -126,7 +148,7 @@ const Main = ({ questionsData, handleRestart }) => {
 
   return (
     <>
-      {
+      {!isFinished && (
         <div className="flex flex-col gap-3 items-center justify-center w-3/5 font-serif">
           <Question
             question={questions[queNo].question}
@@ -154,7 +176,7 @@ const Main = ({ questionsData, handleRestart }) => {
             </button>
           )}
         </div>
-      }
+      )}
     </>
   );
 };
