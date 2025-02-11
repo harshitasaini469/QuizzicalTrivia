@@ -81,16 +81,6 @@ const Main = ({ questionsData, handleRestart }) => {
     localStorage.setItem("gameOver", isFinished);
   }, [isFinished]);
 
-  useEffect(() => {
-    const clearStorageOnClose = () => {
-      localStorage.clear();
-    };
-    window.addEventListener("beforeunload", clearStorageOnClose);
-    return () => {
-      window.removeEventListener("beforeunload", clearStorageOnClose);
-    };
-  }, []);
-
   const handleNext = () => {
     if (questions[queNo] && selectedAns === questions[queNo].correct_answer) {
       setScore((prevScore) => prevScore + 1);
@@ -150,6 +140,7 @@ const Main = ({ questionsData, handleRestart }) => {
     <>
       {!isFinished && (
         <div className="flex flex-col gap-3 items-center justify-center w-3/5 font-serif">
+          <p className="mb-3">{queNo + "/" + questions.length}</p>
           <Question
             question={questions[queNo].question}
             correct_answer={questions[queNo].correct_answer}
